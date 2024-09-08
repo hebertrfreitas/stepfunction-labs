@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:3.5.0
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+    environment:
+      - DEBUG=1
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./localstack_init_script.sh:/etc/localstack/init/ready.d/init_script.sh"
+  simple-python-worker:
+    container_name: simple-pyhton-worker
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    environment:
+      - QUEUE_NAME=input-queue
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=localstack
+      - AWS_SECRET_ACCESS_KEY=localstack
+    depends_on:
+      - localstack

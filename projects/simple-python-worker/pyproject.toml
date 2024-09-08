@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "simple-python-worker"
+version = "0.1.0"
+description = ""
+authors = ["Hebert Freitas <hebertrfreitas@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+boto3 = "1.35.14"
+pydantic = "^2.9.0"
+loguru = "^0.7.2"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.6.4"
+taskipy = "^1.13.0"
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.taskipy.tasks]
+lint = 'ruff check .; ruff check . --diff'
+format = 'ruff check . --fix; ruff format .'
+run = 'AWS_REGION=us-east-1 AWS_ENDPOINT_URL=http://localhost:4566 python simple_python_worker/main.py'
+pre_test = 'task lint'
+dep_export = 'poetry export --without-hashes --without dev -f requirements.txt -o requirements.txt'
