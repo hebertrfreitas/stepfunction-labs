@@ -3,7 +3,9 @@
 #load envs
 source .env
 
-docker build -t ${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${REPO} projects/simple-python-worker/Dockerfile .
+cd projects/simple-python-worker
+
+docker build . -t ${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${REPO}
 
 aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com
 

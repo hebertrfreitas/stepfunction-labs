@@ -25,3 +25,5 @@ services:
       - AWS_SECRET_ACCESS_KEY=localstack
     depends_on:
       - localstack
+    profiles:
+      - worker
