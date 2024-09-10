@@ -27,13 +27,23 @@ resource "aws_iam_role_policy" "ecs_task_execution_policy" {
           "sqs:ReceiveMessage",
           "sqs:GetQueueAttributes",
           "sqs:DeleteMessage",
-          "sqs:ChangeMessageVisibility"
+          "sqs:ChangeMessageVisibility",
+          "sqs:GetQueueUrl"
         ]
         Effect   = "Allow"
         Resource = aws_sqs_queue.input_queue.arn
+      },
+      {
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Effect = "Allow"
+       Resource = "*"
       }
     ]
-  })
+  })             
 }
 
 

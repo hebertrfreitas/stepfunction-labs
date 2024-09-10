@@ -9,9 +9,11 @@ if __name__ == '__main__':
     # Create SQS client
     sqs = boto3.client('sqs')
 
+    logger.info("Starting Simple Python Worker")
     queue_name = os.getenv(key='QUEUE_NAME', default='input-queue')
+    logger.debug("QUEUE_NAME: {}".format(queue_name))
     queue_url = sqs.get_queue_url(QueueName=queue_name)['QueueUrl']
-
+    logger.debug("QUEUE_URL: {}".format(queue_url))
 
     def process_message(message_body):
         print(f'processing message: {message_body}')
@@ -26,6 +28,7 @@ if __name__ == '__main__':
     signal_handler = SignalHandler()
 
     while not signal_handler.received_signal:
+        logger.info("Starting loop for receive messages")
         response = sqs.receive_message(
             QueueUrl=queue_url,
             AttributeNames=['SentTimestamp'],

@@ -14,15 +14,20 @@ services:
       - "./localstack_init_script.sh:/etc/localstack/init/ready.d/init_script.sh"
   simple-python-worker:
     container_name: simple-pyhton-worker
+    platform: "linux/amd64"
     build:
       context: ../
       dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
     environment:
       - QUEUE_NAME=input-queue
       - AWS_ENDPOINT_URL=http://localstack:4566
       - AWS_DEFAULT_REGION=us-east-1
       - AWS_ACCESS_KEY_ID=localstack
       - AWS_SECRET_ACCESS_KEY=localstack
+    healthcheck:
+      test: ps -axu | grep 'main.py' | grep -v grep || exit 1
     depends_on:
       - localstack
     profiles:

@@ -8,15 +8,7 @@
                 "ecs-tasks.amazonaws.com"
              ]
           },
-          "Action":"sts:AssumeRole",
-          "Condition":{
-             "ArnLike":{
-             "aws:SourceArn":"arn:aws:ecs:${region}:${account_id}:*"
-             },
-             "StringEquals":{
-                "aws:SourceAccount":"${account_id}"
-             }
-          }
+          "Action":"sts:AssumeRole"
        }
     ]
  }
