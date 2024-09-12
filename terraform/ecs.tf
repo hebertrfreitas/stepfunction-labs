@@ -82,7 +82,7 @@ resource "aws_ecs_task_definition" "simple-python-worker-task" {
       #   ]
       healthCheck = {
         command     = ["CMD-SHELL", "ps -axu | grep 'main.py' | grep -v grep || exit 1"] #need refactor to a real healthcheck
-        interval    = 30
+        interval    = 20
         timeout     = 5
         retries     = 3
         startPeriod = 0
@@ -95,7 +95,11 @@ resource "aws_ecs_task_definition" "simple-python-worker-task" {
         {
           name  = "AWS_DEFAULT_REGION"
           value = "us-east-1"
-        }
+        },
+        {
+          name  = "ENABLE_WAIT_FOR_CALLBACK"
+          value = "true"
+        },
       ]
 
     }

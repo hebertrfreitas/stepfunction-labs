@@ -1,5 +1,7 @@
 from signal import SIGINT, SIGTERM, signal
+
 from loguru import logger
+
 
 class SignalHandler:
     def __init__(self):

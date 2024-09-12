@@ -26,6 +26,7 @@ services:
       - AWS_DEFAULT_REGION=us-east-1
       - AWS_ACCESS_KEY_ID=localstack
       - AWS_SECRET_ACCESS_KEY=localstack
+      - ENABLE_WAIT_FOR_CALLBACK=False
     healthcheck:
       test: ps -axu | grep 'main.py' | grep -v grep || exit 1
     depends_on:

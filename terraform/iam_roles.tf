@@ -41,7 +41,15 @@ resource "aws_iam_role_policy" "ecs_task_execution_policy" {
         ]
         Effect = "Allow"
        Resource = "*"
-      }
+      },
+      {
+            "Effect": "Allow",
+            "Action": [
+                "states:SendTaskSuccess",
+                "states:SendTaskFailure"
+            ],
+            "Resource": "arn:aws:states:us-east-1:${data.aws_caller_identity.current.account_id}:stateMachine:*"
+        }
     ]
   })             
 }
