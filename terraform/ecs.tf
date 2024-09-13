@@ -82,7 +82,7 @@ resource "aws_ecs_task_definition" "simple-python-worker-task" {
       #   ]
       healthCheck = {
         command     = ["CMD-SHELL", "ps -axu | grep 'main.py' | grep -v grep || exit 1"] #need refactor to a real healthcheck
-        interval    = 20
+        interval    = 35
         timeout     = 5
         retries     = 3
         startPeriod = 0

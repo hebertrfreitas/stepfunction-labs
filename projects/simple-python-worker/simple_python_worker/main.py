@@ -27,26 +27,19 @@ if __name__ == '__main__':
 
     def process_message(message_body: SQSMessageBody):
         logger.debug(f'processing message: {message_body}')
-        new_message = message_body.message + 'processed'
-
+        new_message = message_body.message + '_processed_'
+        time.sleep(10)
         if enable_wait_for_callback:
-            task_token = message_body.taskToken
-            if not task_token:
+            if not message_body.taskToken:
                 raise Exception('Task token is required')
+
             stepfunctions.send_task_success(
-                taskToken=task_token,
+                taskToken=message_body.taskToken,
                 output=json.dumps({
                     'status': 'success',
                     'message': f'{new_message}',
                 }),
             )
-
-            # if failure
-            # stepfunctions.send_k_failure(
-            #     taskToken=task_token,
-            #     error=error,
-            #     cause=cause
-            # )
 
 
     def delete_message(receipt_handle):
@@ -78,8 +71,12 @@ if __name__ == '__main__':
                 try:
                     logger.debug('Received message: {}'.format(message))
                     sqs_message = SQSMessage(**message)
-                    process_message(sqs_message.get_body_as_model())
+                    body: SQSMessageBody = sqs_message.get_body_as_model()
+                    process_message(body)
                     delete_message(sqs_message.ReceiptHandle)
                 except Exception as e:
                     logger.exception('Error processing message: {}'.format(e))
+                    # stepfunctions.send_task_failure(
+                    #     taskToken=task_token,
+                    #     error=e)
                     continue

@@ -17,6 +17,12 @@ variable "deploy_ecs_tasks" {
   default     = false
 }
 
+variable "topic_name"{
+  description = "SNS topic name"
+  type        = string
+  default     = "input-topic"
+}
+
 variable "queue_name" {
   description = "SQS input queue name"
   type        = string
